@@ -353,8 +353,8 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
 }
 
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
-    int x, y;
-    int y2 = y1 + h;
+    int x = 0, y = 0;
+    /*int y2 = y1 + h;
 
     unsigned char byte;
     unsigned char up;
@@ -389,7 +389,37 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
             }
         }
 
+    }*/
+    unsigned int index = 0;
+    unsigned char byte = 0;
+    unsigned char buffa, buffb;
+    while (y * 8 < h)
+    {
+        printf("y");
+        x = 0;
+        while (x < w)
+        {
+            printf("x");
+            byte = buffer[index];
+            if (h / 8 - 1 < y)
+            {
+                byte = byte << (8 - (h - y * 8));
+                byte = byte >> (8 - (h - y * 8));
+                printf("ay");
+            }
+            buffa = byte << (y1 % 8);
+            buffb = byte >> (8 - y1 % 8);
+            if (TEST_X(x + x1) && TEST_Y(y + y1))
+            {
+                LCD_buffer[x1 + x + y * LCD_X + y1 / 8] |= buffa;
+                LCD_buffer[x1 + x + y * LCD_X + LCD_X + y1 / 8] |= buffb;
+            }
+            index += 1;
+            x++;
+        }
+        y += 1;
     }
+    printf("\n");
 }
 
 void LCD_FillRect(int x1, int y1, int x2, int y2, LCD_COLOR color) {
