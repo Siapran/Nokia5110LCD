@@ -81,13 +81,18 @@ int LCD_Init() {
 void LCD_Display() {
     size_t i;
     LCD_StartTransmit();
+
+    // reset position to 0,0
     LCD_SetType(COMMAND);
     LCD_SendByte(0x40);
     LCD_SendByte(0x80);
+
+    // send buffer
     LCD_SetType(DATA);
     for (i = 0 ; i < sizeof(LCD_buffer) ; ++i) {
         LCD_SendByte(LCD_buffer[i]);
     }
+
     LCD_EndTransmit();
 }
 
@@ -351,6 +356,10 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
     int x, y;
     int y2 = y1 + h;
 
+    unsigned char byte;
+    unsigned char up;
+    unsigned char down;
+
     if (!((TEST_Y(y1) || TEST_Y(y2)))) return;
 
     y1 = CLIP_Y(y1);
@@ -363,28 +372,15 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
             switch (mode) {
             case OR:
 
-                if (y1 / 8 != y2 / 8) {
-                    // first byte of the buffer
-                    LCD_buffer[ x + x1 + (y1 / 8 * LCD_X) ] |=
-                        buffer[x + (0) * w] << (y1 % 8);
-                    // last byte of the buffer
-                    LCD_buffer[ x + x1 + (y2 / 8 * LCD_X) ] |=
-                        ~(0xFF << (y2 % 8)) &
-                        (buffer[x + (h / 8 - 1) * w] >> (8 - (y2 % 8)));
-                    printf("%d\n", (8 - (y2 % 8)));
-                    // everything else
-                    // TODO: fix this line
-                    for (y = 1; y < h / 8; y++) {
-                        LCD_buffer[ x + x1 + ((y1 / 8 + y) * LCD_X) ] |=
-                            (buffer[x + (y) * w] << (y1 % 8)) |
-                            (buffer[x + (y - 1) * w] >> (8 - (y1 % 8)));
-                    }
+                for (y = 0; y <= h / 8; ++y)
+                {
+                    byte = buffer[x + y * w];
+                    up = byte << (y1 % 8);
+                    down = (byte >> (8 - y1 % 8)) & ~(0xFF << (y2 % 8));
+                    LCD_buffer[x + x1 + (y + y1 / 8) * LCD_X] |= up;
+                    LCD_buffer[x + x1 + ((y + 1) + y1 / 8) * LCD_X] |= down;
                 }
-                // first byte == laste byte
-                else {
-                    LCD_buffer[ x + x1 + (y1 / 8 * LCD_X) ] |=
-                        buffer[x + (0) * w] << (y1 % 8) & ~(0xFF << (y2 % 8));
-                }
+
                 break;
 
             default:

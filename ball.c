@@ -115,7 +115,7 @@ int main()
 
         LCD_Display();
 
-        usleep(2500000);
+        usleep(250000);
     }
 
     return 0;
