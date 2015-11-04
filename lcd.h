@@ -11,6 +11,8 @@
 #define LCD_PIXEL_SIZE_Y 6
 
 typedef enum {
+    UNDEFINED = -1,
+
     WHITE = 0,  // 0000
     BLACK = 1,  // 0001
     XOR   = 2,  // 0010
