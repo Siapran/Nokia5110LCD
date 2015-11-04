@@ -118,9 +118,6 @@ void LCD_SetBacklight(int on) {
 
 #include <SDL2/SDL.h>
 
-#define LCD_PIXEL_SIZE_X 6
-#define LCD_PIXEL_SIZE_Y 7
-
 static SDL_Window *win;
 static SDL_Renderer *ren;
 
@@ -368,7 +365,6 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
     }
 }
 
-// TODO: rewrite this, but sober
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
     int x, y;
     // int x2 = x1 + w;
@@ -393,8 +389,10 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                     // last byte of the buffer
                     LCD_buffer[ x + x1 + (y2 / 8 * LCD_X) ] |=
                         ~(0xFF << (y2 % 8)) &
-                        (buffer[x + ((h - 1) / 8) * w] >> (8 - (y2 % 8)));
+                        (buffer[x + (h / 8 - 1) * w] >> (8 - (y2 % 8)));
+                    printf("%d\n", (8 - (y2 % 8)));
                     // everything else
+                    // TODO: fix this line
                     for (y = 1; y < h / 8; y++) {
                         LCD_buffer[ x + x1 + ((y1 / 8 + y) * LCD_X) ] |=
                             (buffer[x + (y) * w] << (y1 % 8)) |
@@ -402,8 +400,10 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                     }
                 }
                 // first byte == laste byte
-                else LCD_buffer[ x + x1 + (y1 / 8 * LCD_X) ] |=
-                        (0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8));
+                else {
+                    LCD_buffer[ x + x1 + (y1 / 8 * LCD_X) ] |=
+                        buffer[x + (0) * w] << (y1 % 8) & ~(0xFF << (y2 % 8));
+                }
                 break;
 
             default:

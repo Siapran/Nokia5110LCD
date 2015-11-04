@@ -21,7 +21,7 @@ typedef struct Buffer {
 
 Buffer image = {
     .w = 16,
-    .h = 16,
+    .h = 14,
     .data = {
         0x23, 0x23, 0xEC, 0x2C, 0x23, 0x83, 0x4C, 0xCC, 0x03, 0x83, 0x4C, 0x4C, 0x03, 0x43, 0xEC, 0x4C, 
         0x30, 0x30, 0xC7, 0xC0, 0x30, 0x33, 0xC5, 0xC4, 0x30, 0x34, 0xC5, 0xC2, 0x30, 0x30, 0xC7, 0xC4, 
@@ -96,26 +96,26 @@ int main()
 
     for (;;) {
 
-        for (i = 0; i < size; ++i)
-        {
-            update_ball(&balls[i]);
-        }
+        // for (i = 0; i < size; ++i)
+        // {
+        //     update_ball(&balls[i]);
+        // }
 
         LCD_Clear();
 
-        for (i = 0; i < size; ++i)
-        {
-            draw_ball(&balls[i]);
-        }
-
-        // for (i = 0; i <= 84/16; ++i)
+        // for (i = 0; i < size; ++i)
         // {
-        //     LCD_Blit(image.data, i * 16, i, 16, 16, OR);
+        //     draw_ball(&balls[i]);
         // }
+
+        for (i = 0; i <= 84/16; ++i)
+        {
+            LCD_Blit(image.data, i * 16, i, image.w, image.h, OR);
+        }
 
         LCD_Display();
 
-        usleep(25000);
+        usleep(2500000);
     }
 
     return 0;

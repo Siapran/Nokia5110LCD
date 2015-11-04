@@ -7,6 +7,9 @@
 #define LCD_X     84
 #define LCD_Y     48
 
+#define LCD_PIXEL_SIZE_X 6
+#define LCD_PIXEL_SIZE_Y 6
+
 typedef enum {
     WHITE = 0,  // 0000
     BLACK = 1,  // 0001
