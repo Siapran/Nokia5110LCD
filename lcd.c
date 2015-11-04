@@ -376,11 +376,12 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                 {
                     byte = buffer[x + y * w];
                     up = byte << (y1 % 8);
-                    down = (byte >> (8 - y1 % 8)) & ~(0xFF << (y2 % 8));
+                    down = (byte >> (8 - y1 % 8));
                     LCD_buffer[x + x1 + (y + y1 / 8) * LCD_X] |= up;
                     LCD_buffer[x + x1 + ((y + 1) + y1 / 8) * LCD_X] |= down;
                 }
-
+                down = (byte >> (8 - y1 % 8)) & ~(0xFF << (y2 % 8));
+                LCD_buffer[x + x1 + ((y + 1) + y1 / 8) * LCD_X] |= down;
                 break;
 
             default:
