@@ -395,17 +395,14 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
     unsigned char buffa, buffb;
     while (y * 8 < h)
     {
-        printf("y");
         x = 0;
         while (x < w)
         {
-            printf("x");
             byte = buffer[index];
             if (h / 8 - 1 < y)
             {
                 byte = byte << (8 - (h - y * 8));
                 byte = byte >> (8 - (h - y * 8));
-                printf("ay");
             }
             buffa = byte << (y1 % 8);
             buffb = byte >> (8 - y1 % 8);
@@ -419,7 +416,6 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
         }
         y += 1;
     }
-    printf("\n");
 }
 
 void LCD_FillRect(int x1, int y1, int x2, int y2, LCD_COLOR color) {
