@@ -234,8 +234,10 @@ void LCD_Pixel(int x, int y, LCD_COLOR color) {
 
 LCD_COLOR LCD_PixelGet(int x, int y) {
     return 0 != // double negation (forces true to 1 and false to 0)
-           LCD_buffer[ x + (y / 8 * LCD_X) ] & // location on buffer (y / 8)
-           (1 << (y % 8)); // get the appropriate bit from the byte (y % 8)
+           (
+               LCD_buffer[ x + (y / 8 * LCD_X) ] & // location on buffer (y / 8)
+               (1 << (y % 8)) // get the appropriate bit from the byte (y % 8)
+           );
 }
 
 void LCD_DrawLine(int x1, int y1, int x2, int y2, LCD_COLOR color) {
@@ -457,7 +459,7 @@ void LCD_FillCircle(int y, int x, int radius, LCD_COLOR color) {
     }
 }
 
-
+// TODO: rewrite this, but sober
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
     // int plot_x, plot_y;
     // int x2 = x1 + w;
