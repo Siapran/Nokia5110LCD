@@ -368,6 +368,51 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
     }
 }
 
+// TODO: rewrite this, but sober
+void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
+    int x, y;
+    // int x2 = x1 + w;
+    int y2 = y1 + h;
+
+    if (!((TEST_Y(y1) || TEST_Y(y2)))) return;
+
+    y1 = CLIP_Y(y1);
+    y2 = CLIP_Y(y2);
+
+    for (x = 0; x < w; ++x) {
+
+        if (TEST_X(x + x1))
+        {
+            switch (mode) {
+            case OR:
+
+                if (y1 / 8 != y2 / 8) {
+                    // first byte of the buffer
+                    LCD_buffer[ x + x1 + (y1 / 8 * LCD_X) ] |=
+                        buffer[x + (0) * w] << (y1 % 8);
+                    // last byte of the buffer
+                    LCD_buffer[ x + x1 + (y2 / 8 * LCD_X) ] |=
+                        ~(0xFF << (y2 % 8)) &
+                        (buffer[x + ((h - 1) / 8) * w] >> (8 - (y2 % 8)));
+                    // everything else
+                    for (y = 1; y < h / 8; y++) {
+                        LCD_buffer[ x + x1 + ((y1 / 8 + y) * LCD_X) ] |=
+                            (buffer[x + (y) * w] << (y1 % 8)) |
+                            (buffer[x + (y - 1) * w] >> (8 - (y1 % 8)));
+                    }
+                }
+                // first byte == laste byte
+                else LCD_buffer[ x + x1 + (y1 / 8 * LCD_X) ] |=
+                        (0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8));
+                break;
+
+            default:
+                break;
+            }
+        }
+
+    }
+}
 
 void LCD_FillRect(int x1, int y1, int x2, int y2, LCD_COLOR color) {
     int x;
@@ -457,28 +502,5 @@ void LCD_FillCircle(int y, int x, int radius, LCD_COLOR color) {
             LCD_VerticalLine(y - plot_x, x - plot_y, x + plot_y, color);
         }
     }
-}
-
-// TODO: rewrite this, but sober
-void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
-    // int plot_x, plot_y;
-    // int x2 = x1 + w;
-    // int y2 = y1 + h;
-    // for (plot_x = 0; plot_x < w; ++plot_x) {
-
-    //     if (h > 8) {
-    //         LCD_buffer[ plot_x + x1 + (y1 / 8 * LCD_X) ] |=
-    //             buffer[ plot_x ] << (y1 % 8);
-
-    //         for (plot_y = 1; plot_y < h; plot_y++) {
-    //             LCD_buffer[ plot_x + x1 + ((plot_y + y1) / 8 * LCD_X) ] |=
-    //                 buffer[ plot_x + (plot_y /  * w) ] << (y1 % 8) |
-    //                 buffer[ plot_x + ((plot_y + 1) * w) ] >> (7 - (y1 % 8));
-    //         }
-    //     }
-    //     LCD_buffer[ plot_x + x1 + (y2 / 8 * LCD_X) ] |=
-    //         buffer[ plot_x + (h / 8 * w) ] >> (7 - (y1 % 8)) &
-    //         (0xFF << (y2 % 8));
-    // }
 }
 

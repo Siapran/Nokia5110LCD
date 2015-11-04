@@ -10,14 +10,24 @@ typedef struct Buffer {
     const unsigned char data[];
 } Buffer;
 
+// Buffer image = {
+//     .w = 8,
+//     .h = 32,
+//     .data = {
+//         0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55,
+//         0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55,
+//     }
+// };
+
 Buffer image = {
     .w = 16,
     .h = 16,
     .data = {
-        0xC1, 0x5F, 0x41, 0x00, 0x1F, 0xD5, 0x11, 0x00, 0xD2, 0x15, 0x09, 0x00, 0xC1, 0x5F, 0x41, 0x00,
-        0x07, 0x01, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x07, 0x04, 0x04, 0x00, 0x07, 0x05, 0x04, 0x00,
+        0x23, 0x23, 0xEC, 0x2C, 0x23, 0x83, 0x4C, 0xCC, 0x03, 0x83, 0x4C, 0x4C, 0x03, 0x43, 0xEC, 0x4C, 
+        0x30, 0x30, 0xC7, 0xC0, 0x30, 0x33, 0xC5, 0xC4, 0x30, 0x34, 0xC5, 0xC2, 0x30, 0x30, 0xC7, 0xC4, 
     }
 };
+
 
 
 typedef struct Ball {
@@ -53,11 +63,11 @@ void update_ball(Ball *ball) {
 
 void draw_ball(Ball *ball) {
 
-    LCD_FillCircle(ball->x, ball->y, ball->r, WHITE);
-    LCD_DrawCircle(ball->x, ball->y, ball->r, BLACK);
-    LCD_FillCircle(ball->x, ball->y, ball->r - 2, BLACK);
+    // LCD_FillCircle(ball->x, ball->y, ball->r, WHITE);
+    // LCD_DrawCircle(ball->x, ball->y, ball->r, BLACK);
+    // LCD_FillCircle(ball->x, ball->y, ball->r - 2, BLACK);
 
-    // LCD_Blit(image.data, ball->x, ball->y, image.w, image.h, OR);
+    LCD_Blit(image.data, ball->x - ball->r, ball->y - ball->r, image.w, image.h, OR);
 
     // LCD_FillRect(ball->x - ball->r, ball->y - ball->r, ball->x + ball->r, ball->y + ball->r, XOR);
     // LCD_DrawRect(ball->x - ball->r, ball->y - ball->r,
@@ -84,7 +94,7 @@ int main()
 
     LCD_SetBacklight(1);
 
-    while (1) {
+    for (;;) {
 
         for (i = 0; i < size; ++i)
         {
@@ -97,6 +107,11 @@ int main()
         {
             draw_ball(&balls[i]);
         }
+
+        // for (i = 0; i <= 84/16; ++i)
+        // {
+        //     LCD_Blit(image.data, i * 16, i, 16, 16, OR);
+        // }
 
         LCD_Display();
 
