@@ -1,15 +1,33 @@
+/*
+ 13-10-2015
+ Retroactive (retroactive.me)
+ Siapran Candoris
+
+ This code is public domain, inspired by the work of:
+    Nathan Seidle (Spark Fun Electronics 2011), as "Beerware licenced" public domain 
+    Pierre "PierrotLL" Le Gall, as "free software"
+
+ This code allows writing data to the Nokia 5110 84x48 graphic LCD:
+ http://www.sparkfun.com/products/10168
+
+ You can also test your code on an emulated Nokia 5110 screen by defining LCD_EMULATED and linking to SDL2 libraries.
+ */
+
 #ifndef LCD_H
 #define LCD_H
 
 #define LCD_EMULATED // to emulate LCD display using SDL
 
-//You may find a different size screen, but this one is 84 by 48 pixels
+// You may find a different size screen, but this one is 84 by 48 pixels
 #define LCD_X     84
 #define LCD_Y     48
 
+// You may ajust emulated pixel size with these values.
+// A good default is 6,7
 #define LCD_PIXEL_SIZE_X 6
 #define LCD_PIXEL_SIZE_Y 6
 
+// LCD_COLOR is used both for pixel color and blitting modes
 typedef enum {
     UNDEFINED = -1,
 
@@ -39,7 +57,7 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color);
 void LCD_FillRect(int x1, int y1, int x2, int y2, LCD_COLOR color);
 void LCD_DrawRect(int x1, int y1, int x2, int y2, LCD_COLOR color);
 void LCD_DrawCircle(int x, int y, int radius, LCD_COLOR color);
-void LCD_FillCircle(int y, int x, int radius, LCD_COLOR color);
+void LCD_FillCircle(int x, int y, int radius, LCD_COLOR color);
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode);
 
 #endif

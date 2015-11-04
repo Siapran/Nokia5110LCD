@@ -1,22 +1,3 @@
-/*
- 13-10-2015
- Retroactive (retroactive.me)
- Siapran Candoris
-
- This code is public domain, inspired by the work of Nathan Seidle, Spark Fun Electronics 2011.
-
- This code allows writing data to the Nokia 5110 84x48 graphic LCD:
- http://www.sparkfun.com/products/10168
-
- Do not drive the backlight with 5V. It will smoke. However, the backlight on the LCD seems to be
- happy with direct drive from the 3.3V regulator.
-
- Although the PCD8544 controller datasheet recommends 3.3V, the graphic Nokia 5110 LCD can run at 3.3V or 5V.
- No resistors needed on the signal lines.
-
- You will need 5 signal lines to connect to the LCD, 3.3 or 5V for power, 3.3V for LED backlight, and 1 for ground.
- */
-
 #include <stdlib.h>
 #include <stdio.h>
 #include "lcd.h"
@@ -368,7 +349,6 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
 
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
     int x, y;
-    // int x2 = x1 + w;
     int y2 = y1 + h;
 
     if (!((TEST_Y(y1) || TEST_Y(y2)))) return;
@@ -477,30 +457,30 @@ void LCD_DrawCircle(int x, int y, int radius, LCD_COLOR color) {
     }
 }
 
-void LCD_FillCircle(int y, int x, int radius, LCD_COLOR color) {
-    int plot_x, plot_y, d;
+void LCD_FillCircle(int x, int y, int radius, LCD_COLOR color) {
+    int plot_y, plot_x, d;
 
     if (radius < 0) return;
-    plot_x = 0;
-    plot_y = radius;
+    plot_y = 0;
+    plot_x = radius;
     d = 1 - radius;
 
-    LCD_VerticalLine(y, x - plot_y, x + plot_y, color);
-    while (plot_y > plot_x)
+    LCD_VerticalLine(x, y - plot_x, y + plot_x, color);
+    while (plot_x > plot_y)
     {
         if (d < 0)
-            d += 2 * plot_x + 3;
+            d += 2 * plot_y + 3;
         else {
-            d += 2 * (plot_x - plot_y) + 5;
-            plot_y--;
-            LCD_VerticalLine(y + plot_y + 1, x - plot_x, x + plot_x, color);
-            LCD_VerticalLine(y - plot_y - 1, x - plot_x, x + plot_x, color);
+            d += 2 * (plot_y - plot_x) + 5;
+            plot_x--;
+            LCD_VerticalLine(x + plot_x + 1, y - plot_y, y + plot_y, color);
+            LCD_VerticalLine(x - plot_x - 1, y - plot_y, y + plot_y, color);
         }
-        plot_x++;
-        if (plot_y >= plot_x)
+        plot_y++;
+        if (plot_x >= plot_y)
         {
-            LCD_VerticalLine(y + plot_x, x - plot_y, x + plot_y, color);
-            LCD_VerticalLine(y - plot_x, x - plot_y, x + plot_y, color);
+            LCD_VerticalLine(x + plot_y, y - plot_x, y + plot_x, color);
+            LCD_VerticalLine(x - plot_y, y - plot_x, y + plot_x, color);
         }
     }
 }
