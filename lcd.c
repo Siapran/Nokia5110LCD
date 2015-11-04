@@ -192,6 +192,7 @@ void LCD_SetBacklight(int on) {
 
 #endif
 
+// TODO: improve genericity
 #define CLIP_X(pos) (pos < 0 ? 0 : (pos > LCD_X ? LCD_X : pos))
 #define CLIP_Y(pos) (pos < 0 ? 0 : (pos > LCD_Y ? LCD_Y : pos))
 #define TEST_X(pos) (pos < 0 ? 0 : (pos >= LCD_X ? 0 : 1))
@@ -232,7 +233,9 @@ void LCD_Pixel(int x, int y, LCD_COLOR color) {
 }
 
 LCD_COLOR LCD_PixelGet(int x, int y) {
-    return 0 != (LCD_buffer[ x + (y / 8 * LCD_X) ] & (1 << (y % 8)));
+    return 0 != // double negation (forces true to 1 and false to 0)
+           LCD_buffer[ x + (y / 8 * LCD_X) ] & // location on buffer (y / 8)
+           (1 << (y % 8)); // get the appropriate bit from the byte (y % 8)
 }
 
 void LCD_DrawLine(int x1, int y1, int x2, int y2, LCD_COLOR color) {
