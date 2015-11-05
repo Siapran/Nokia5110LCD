@@ -217,7 +217,7 @@ void LCD_Pixel(int x, int y, LCD_COLOR color) {
 
 LCD_COLOR LCD_PixelGet(int x, int y) {
     if (!(TEST_X(x) && TEST_Y(y))) return UNDEFINED;
-    return 0 != // double negation (forces true to 1 and false to 0)
+    return !! // double negation (forces true to 1 and false to 0)
            (
                LCD_buffer[ x + (y / 8 * LCD_X) ] & // location on buffer (y / 8)
                (1 << (y % 8)) // get the appropriate bit from the byte (y % 8)
@@ -362,7 +362,7 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
         x = 0;
         while (x < w)
         {
-            if (TEST_X(x + x1) && TEST_Y(y + y1))
+            if (TEST_X(x + x1))
             {
                 byte = buffer[index];
                 if (y >= h / 8)
