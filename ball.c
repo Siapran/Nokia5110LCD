@@ -38,7 +38,7 @@ typedef struct Ball {
     int r;
 } Ball;
 
-static Ball balls[8];
+static Ball balls[1];
 
 void create_ball(Ball *ball) {
     ball->vx = ((rand() % 2) * 2 - 1) * (rand() % 2 + 1);
@@ -96,22 +96,22 @@ int main()
 
     for (;;) {
 
-        // for (i = 0; i < size; ++i)
-        // {
-        //     update_ball(&balls[i]);
-        // }
+        for (i = 0; i < size; ++i)
+        {
+            update_ball(&balls[i]);
+        }
 
         LCD_Clear();
 
-        // for (i = 0; i < size; ++i)
-        // {
-        //     draw_ball(&balls[i]);
-        // }
-
-        for (i = 0; i <= 84/16; ++i)
+        for (i = 0; i < size; ++i)
         {
-            LCD_Blit(image.data, i * 16, i, image.w, image.h, OR);
+            draw_ball(&balls[i]);
         }
+
+        // for (i = 0; i <= 84/16; ++i)
+        // {
+        //     LCD_Blit(image.data, i * 16, i, image.w, image.h, OR);
+        // }
 
         LCD_Display();
 

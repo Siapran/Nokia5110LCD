@@ -354,42 +354,6 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
 
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
     int x = 0, y = 0;
-    /*int y2 = y1 + h;
-
-    unsigned char byte;
-    unsigned char up;
-    unsigned char down;
-
-    if (!((TEST_Y(y1) || TEST_Y(y2)))) return;
-
-    y1 = CLIP_Y(y1);
-    y2 = CLIP_Y(y2);
-
-    for (x = 0; x < w; ++x) {
-
-        if (TEST_X(x + x1))
-        {
-            switch (mode) {
-            case OR:
-
-                for (y = 0; y <= h / 8; ++y)
-                {
-                    byte = buffer[x + y * w];
-                    up = byte << (y1 % 8);
-                    down = (byte >> (8 - y1 % 8));
-                    LCD_buffer[x + x1 + (y + y1 / 8) * LCD_X] |= up;
-                    LCD_buffer[x + x1 + ((y + 1) + y1 / 8) * LCD_X] |= down;
-                }
-                down = (byte >> (8 - y1 % 8)) & ~(0xFF << (y2 % 8));
-                LCD_buffer[x + x1 + ((y + 1) + y1 / 8) * LCD_X] |= down;
-                break;
-
-            default:
-                break;
-            }
-        }
-
-    }*/
     unsigned int index = 0;
     unsigned char byte = 0;
     unsigned char buffa, buffb;
@@ -398,16 +362,16 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
         x = 0;
         while (x < w)
         {
-            byte = buffer[index];
-            if (h / 8 - 1 < y)
-            {
-                byte = byte << (8 - (h - y * 8));
-                byte = byte >> (8 - (h - y * 8));
-            }
-            buffa = byte << (y1 % 8);
-            buffb = byte >> (8 - y1 % 8);
             if (TEST_X(x + x1) && TEST_Y(y + y1))
             {
+                byte = buffer[index];
+                if (h / 8 - 1 < y)
+                {
+                    byte = byte << (8 - (h - y * 8));
+                    byte = byte >> (8 - (h - y * 8));
+                }
+                buffa = byte << (y1 % 8);
+                buffb = byte >> (8 - y1 % 8);
                 LCD_buffer[x1 + x + y * LCD_X + y1 / 8] |= buffa;
                 LCD_buffer[x1 + x + y * LCD_X + LCD_X + y1 / 8] |= buffb;
             }
