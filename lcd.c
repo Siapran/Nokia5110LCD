@@ -365,15 +365,14 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
             if (TEST_X(x + x1) && TEST_Y(y + y1))
             {
                 byte = buffer[index];
-                if (h / 8 - 1 < y)
+                if (y >= h / 8)
                 {
-                    byte = byte << (8 - (h - y * 8));
-                    byte = byte >> (8 - (h - y * 8));
+                    byte &= 0xFF >> (8 - (h - y * 8));
                 }
                 buffa = byte << (y1 % 8);
                 buffb = byte >> (8 - y1 % 8);
-                LCD_buffer[x1 + x + y * LCD_X + y1 / 8] |= buffa;
-                LCD_buffer[x1 + x + y * LCD_X + LCD_X + y1 / 8] |= buffb;
+                LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] |= buffa;
+                LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
             }
             index += 1;
             x++;
