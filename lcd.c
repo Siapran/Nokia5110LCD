@@ -371,8 +371,10 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                 }
                 buffa = byte << (y1 % 8);
                 buffb = byte >> (8 - y1 % 8);
-                LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] |= buffa;
-                LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
+                if (TEST_Y(y1 + y * 8))
+                    LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] |= buffa;
+                if (TEST_Y(y1 + y * 8 + 8))
+                    LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
             }
             index += 1;
             x++;
