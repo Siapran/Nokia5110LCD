@@ -384,6 +384,8 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                         LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
                     break;
                 case AND:
+                    buffa |= 0xFF >> (8 - y1 % 8);
+                    buffb |= 0xFF << (y1 % 8);
                     if (TEST_Y(y1 + y * 8))
                         LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] &= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))

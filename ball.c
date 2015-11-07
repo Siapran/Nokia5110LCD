@@ -58,7 +58,7 @@ typedef struct Ball {
     int r;
 } Ball;
 
-static Ball balls[1];
+static Ball balls[8];
 
 void create_ball(Ball *ball) {
     ball->vx = ((rand() % 2) * 2 - 1) * (rand() % 2 + 1);
