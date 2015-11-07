@@ -87,7 +87,7 @@ void draw_ball(Ball *ball) {
     // LCD_DrawCircle(ball->x, ball->y, ball->r, BLACK);
     // LCD_FillCircle(ball->x, ball->y, ball->r - 2, BLACK);
 
-    LCD_Blit(image.data, ball->x - ball->r, ball->y - ball->r, image.w, image.h, AND);
+    LCD_Blit(image.data, ball->x - ball->r, ball->y - ball->r, image.w, image.h, XOR);
 
     // LCD_FillRect(ball->x - ball->r, ball->y - ball->r, ball->x + ball->r, ball->y + ball->r, XOR);
     // LCD_DrawRect(ball->x - ball->r, ball->y - ball->r,
@@ -122,7 +122,7 @@ int main()
         }
 
         LCD_Clear();
-        LCD_Invert();
+        // LCD_Invert();
 
         for (i = 0; i < size; ++i)
         {
