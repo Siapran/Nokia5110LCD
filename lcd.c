@@ -365,14 +365,39 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                 byte = buffer[index];
                 if (y >= h / 8)
                 {
-                    byte &= 0xFF >> (8 - (h % 8));
+                    switch (mode) {
+                    case AND:
+                        byte |= ~(0xFF >> (8 - (h % 8)));
+                        break;
+                    default:
+                        byte &= 0xFF >> (8 - (h % 8));
+                        break;
+                    }
                 }
                 buffa = byte << (y1 % 8);
                 buffb = byte >> (8 - y1 % 8);
-                if (TEST_Y(y1 + y * 8))
-                    LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] |= buffa;
-                if (TEST_Y(y1 + y * 8 + 8))
-                    LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
+                switch (mode) {
+                case OR:
+                    if (TEST_Y(y1 + y * 8))
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] |= buffa;
+                    if (TEST_Y(y1 + y * 8 + 8))
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
+                    break;
+                case AND:
+                    if (TEST_Y(y1 + y * 8))
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] &= buffa;
+                    if (TEST_Y(y1 + y * 8 + 8))
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] &= buffb;
+                    break;
+                case XOR:
+                    if (TEST_Y(y1 + y * 8))
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] ^= buffa;
+                    if (TEST_Y(y1 + y * 8 + 8))
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] ^= buffb;
+                    break;
+                default:
+                    break;
+                }
             }
             ++index;
         }

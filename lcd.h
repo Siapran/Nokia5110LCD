@@ -36,12 +36,6 @@ typedef enum {
     XOR   = 2,  // 0010
     OR    = 3,  // 0011
     AND   = 4,  // 0100
-    NXOR  = 10, // 1010
-    NOR   = 11, // 1011
-    NAND  = 12, // 1100
-    // bitmasks
-    MODE  = 7,  // 0111
-    NOT   = 8,  // 1000 
 } LCD_COLOR;
 
 int LCD_Init();
