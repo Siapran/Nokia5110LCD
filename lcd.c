@@ -353,21 +353,19 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
 }
 
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode) {
-    int x = 0, y = 0;
+    int x, y;
     unsigned int index = 0;
     unsigned char byte = 0;
     unsigned char buffa, buffb;
-    while (y * 8 < h)
-    {
-        x = 0;
-        while (x < w)
-        {
+
+    for (y = 0; y * 8 < h; ++y) {
+        for (x = 0; x < w; ++x) {
             if (TEST_X(x + x1))
             {
                 byte = buffer[index];
                 if (y >= h / 8)
                 {
-                    byte &= 0xFF >> (8 - (h - y * 8));
+                    byte &= 0xFF >> (8 - (h % 8));
                 }
                 buffa = byte << (y1 % 8);
                 buffb = byte >> (8 - y1 % 8);
@@ -376,12 +374,12 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                 if (TEST_Y(y1 + y * 8 + 8))
                     LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
             }
-            index += 1;
-            x++;
+            ++index;
         }
-        y += 1;
     }
 }
+
+
 
 void LCD_FillRect(int x1, int y1, int x2, int y2, LCD_COLOR color) {
     int x;
