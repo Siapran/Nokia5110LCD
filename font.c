@@ -14,5 +14,10 @@ void LCD_PutChar(char c) {
 }
 
 void LCD_Text(const char *string, int x, int y, LCD_COLOR mode) {
-
+	if (x >= 0) LCD_text_X = x;
+	if (y >= 0) LCD_text_Y = y;
+	if (mode != UNDEFINED) LCD_text_mode = mode;
+	while (*string) {
+		LCD_PutChar(*string++);
+	}
 }

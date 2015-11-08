@@ -2,6 +2,6 @@
 
 int main(int argc, char const *argv[])
 {
-	printf("%x\n", 0xFF & ~(1 << 3));
+	printf("%d\n", -9 % 8);
 	return 0;
 }

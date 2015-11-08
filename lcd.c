@@ -374,28 +374,28 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                         break;
                     }
                 }
-                buffa = byte << (y1 % 8);
-                buffb = byte >> (8 - y1 % 8);
+                buffa = byte << ((y1 % 8 + 8) % 8);
+                buffb = byte >> (8 - (y1 % 8 + 8) % 8);
                 switch (mode & MODE) {
                 case OR:
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] |= buffa;
+                        LCD_buffer[x1 + x + (y * 8 + y1) / 8 * LCD_WIDTH] |= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] |= buffb;
+                        LCD_buffer[x1 + x + (y * 8 + y1 + 8) / 8 * LCD_WIDTH] |= buffb;
                     break;
                 case AND:
                     buffa |= 0xFF >> (8 - y1 % 8);
                     buffb |= 0xFF << (y1 % 8);
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] &= buffa;
+                        LCD_buffer[x1 + x + (y * 8 + y1) / 8 * LCD_WIDTH] &= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] &= buffb;
+                        LCD_buffer[x1 + x + (y * 8 + y1 + 8) / 8 * LCD_WIDTH] &= buffb;
                     break;
                 case XOR:
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] ^= buffa;
+                        LCD_buffer[x1 + x + (y * 8 + y1) / 8 * LCD_WIDTH] ^= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] ^= buffb;
+                        LCD_buffer[x1 + x + (y * 8 + y1 + 8) / 8 * LCD_WIDTH] ^= buffb;
                     break;
                 default:
                     break;
@@ -408,9 +408,9 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                         byte = byte >> (8 - (h % 8));
                     }
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] ^= byte << (y1 % 8);
+                        LCD_buffer[x1 + x + (y * 8 + y1) / 8 * LCD_WIDTH] ^= byte << (y1 % 8);
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] ^= byte >> (8 - y1 % 8);
+                        LCD_buffer[x1 + x + (y * 8 + y1 + 8) / 8 * LCD_WIDTH] ^= byte >> (8 - y1 % 8);
                 }
             }
             ++index;

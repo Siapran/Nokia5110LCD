@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <time.h>
 #include "lcd.h"
+#include "font.h"
 
 typedef struct Buffer {
     int w;
@@ -116,18 +117,20 @@ int main()
 
     for (;;) {
 
-        for (i = 0; i < size; ++i)
-        {
-            update_ball(&balls[i]);
-        }
+        // for (i = 0; i < size; ++i)
+        // {
+        //     update_ball(&balls[i]);
+        // }
 
-        LCD_Clear();
+        // LCD_Clear();
         // LCD_Invert();
 
-        for (i = 0; i < size; ++i)
-        {
-            draw_ball(&balls[i]);
-        }
+        LCD_Text("Hello World!", -1, -1, OR);
+        
+        // for (i = 0; i < size; ++i)
+        // {
+        //     draw_ball(&balls[i]);
+        // }
 
         // for (i = 0; i <= 84/16; ++i)
         // {
@@ -136,7 +139,7 @@ int main()
 
         LCD_Display();
 
-        usleep(25000);
+        usleep(250000);
     }
 
     return 0;

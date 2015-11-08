@@ -24,4 +24,5 @@ rmproper: clean
 	@rm -rf $(EXEC)
 
 
-ball.o: lcd.h
+ball.o: lcd.h font.h
+font.o: lcd.h
