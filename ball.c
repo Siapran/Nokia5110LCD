@@ -64,18 +64,18 @@ void create_ball(Ball *ball) {
     ball->vx = ((rand() % 2) * 2 - 1) * (rand() % 2 + 1);
     ball->vy = ((rand() % 2) * 2 - 1) * (rand() % 2 + 1);
     ball->r = rand() % 8 + 4;
-    ball->x = rand() % (LCD_X - ball->r * 2) + ball->r;
-    ball->y = rand() % (LCD_Y - ball->r * 2) + ball->r;
+    ball->x = rand() % (LCD_WIDTH - ball->r * 2) + ball->r;
+    ball->y = rand() % (LCD_HEIGHT - ball->r * 2) + ball->r;
 }
 
 void update_ball(Ball *ball) {
     ball->x += ball->vx;
     ball->y += ball->vy;
-    if (ball->x - ball->r < 0 || ball->x + ball->r >= LCD_X) {
+    if (ball->x - ball->r < 0 || ball->x + ball->r >= LCD_WIDTH) {
         ball->vx = -ball->vx;
         ball->x += 2 * ball->vx;
     }
-    if (ball->y - ball->r < 0 || ball->y + ball->r >= LCD_Y) {
+    if (ball->y - ball->r < 0 || ball->y + ball->r >= LCD_HEIGHT) {
         ball->vy = -ball->vy;
         ball->y += 2 * ball->vy;
     }
@@ -85,9 +85,9 @@ void draw_ball(Ball *ball) {
 
     // LCD_FillCircle(ball->x, ball->y, ball->r, WHITE);
     // LCD_DrawCircle(ball->x, ball->y, ball->r, BLACK);
-    // LCD_FillCircle(ball->x, ball->y, ball->r - 2, BLACK);
+    LCD_FillCircle(ball->x, ball->y, ball->r , XOR);
 
-    LCD_Blit(image.data, ball->x - ball->r, ball->y - ball->r, image.w, image.h, XOR);
+    // LCD_Blit(image.data, ball->x - ball->r, ball->y - ball->r, image.w, image.h, XOR);
 
     // LCD_FillRect(ball->x - ball->r, ball->y - ball->r, ball->x + ball->r, ball->y + ball->r, XOR);
     // LCD_DrawRect(ball->x - ball->r, ball->y - ball->r,
@@ -136,7 +136,7 @@ int main()
 
         LCD_Display();
 
-        usleep(250000);
+        usleep(25000);
     }
 
     return 0;

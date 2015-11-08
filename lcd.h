@@ -19,14 +19,14 @@
 #define LCD_EMULATED // to emulate LCD display using SDL
 
 // You may find a different size screen, but this one is 84 by 48 pixels
-#define LCD_X     84
-#define LCD_Y     48
+#define LCD_WIDTH     84
+#define LCD_HEIGHT    48
 
 // You may ajust emulated pixel size with these values.
 // A good default is 6,7
 #define LCD_PIXEL_SIZE_X 6
-#define LCD_PIXEL_SIZE_Y 6
-
+#define LCD_PIXEL_SIZE_Y 7
+ 
 // LCD_COLOR is used both for pixel color and blitting modes
 typedef enum {
     UNDEFINED = -1,
@@ -59,5 +59,6 @@ void LCD_DrawRect(int x1, int y1, int x2, int y2, LCD_COLOR color);
 void LCD_DrawCircle(int x, int y, int radius, LCD_COLOR color);
 void LCD_FillCircle(int x, int y, int radius, LCD_COLOR color);
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode);
+void LCD_Scroll(int x, int y);
 
 #endif

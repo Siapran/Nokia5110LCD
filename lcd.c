@@ -15,7 +15,7 @@ typedef enum {
 // screen buffer
 // all drawing operations are made internally on the buffer
 // the buffer is then sent to the LCD screen via LCD_Display()
-static unsigned char LCD_buffer[LCD_X * LCD_Y / 8];
+static unsigned char LCD_buffer[LCD_WIDTH * LCD_HEIGHT / 8];
 LCD_COLOR LCD_PixelGet(int x, int y);
 
 #ifndef LCD_EMULATED
@@ -115,7 +115,7 @@ int LCD_Init() {
         return 1;
     }
 
-    win = SDL_CreateWindow("Nokia 5110 LCD", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, LCD_X * LCD_PIXEL_SIZE_X, LCD_Y * LCD_PIXEL_SIZE_Y, SDL_WINDOW_SHOWN);
+    win = SDL_CreateWindow("Nokia 5110 LCD", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, LCD_WIDTH * LCD_PIXEL_SIZE_X, LCD_HEIGHT * LCD_PIXEL_SIZE_Y, SDL_WINDOW_SHOWN);
     if (win == NULL)
     {
         printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
@@ -144,8 +144,8 @@ void LCD_Display() {
     SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
     SDL_RenderClear(ren);
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
-    for (y = 0; y < LCD_Y; ++y) {
-        for (x = 0; x < LCD_X; ++x) {
+    for (y = 0; y < LCD_HEIGHT; ++y) {
+        for (x = 0; x < LCD_WIDTH; ++x) {
             if (LCD_PixelGet(x, y) == BLACK)
             {
                 pixel.x = x * LCD_PIXEL_SIZE_X;
@@ -176,10 +176,10 @@ void LCD_SetBacklight(int on) {
 #endif
 
 // TODO: improve genericity
-#define CLIP_X(pos) (pos < 0 ? 0 : (pos > LCD_X ? LCD_X : pos))
-#define CLIP_Y(pos) (pos < 0 ? 0 : (pos > LCD_Y ? LCD_Y : pos))
-#define TEST_X(pos) (pos < 0 ? 0 : (pos >= LCD_X ? 0 : 1))
-#define TEST_Y(pos) (pos < 0 ? 0 : (pos >= LCD_Y ? 0 : 1))
+#define CLIP_X(pos) (pos < 0 ? 0 : (pos > LCD_WIDTH ? LCD_WIDTH : pos))
+#define CLIP_Y(pos) (pos < 0 ? 0 : (pos > LCD_HEIGHT ? LCD_HEIGHT : pos))
+#define TEST_X(pos) (pos < 0 ? 0 : (pos >= LCD_WIDTH ? 0 : 1))
+#define TEST_Y(pos) (pos < 0 ? 0 : (pos >= LCD_HEIGHT ? 0 : 1))
 
 void LCD_Clear() {
     size_t i;
@@ -198,7 +198,7 @@ void LCD_Invert() {
 void LCD_Pixel(int x, int y, LCD_COLOR color) {
     unsigned char *ptr;
     if (TEST_X(x) && TEST_Y(y)) {
-        ptr = &LCD_buffer[ x + (y / 8 * LCD_X) ];
+        ptr = &LCD_buffer[ x + (y / 8 * LCD_WIDTH) ];
         switch (color) {
         case WHITE:
             *ptr &= ~(1 << (y % 8)); // erase pixel
@@ -219,7 +219,7 @@ LCD_COLOR LCD_PixelGet(int x, int y) {
     if (!(TEST_X(x) && TEST_Y(y))) return UNDEFINED;
     return !! // double negation (forces true to 1 and false to 0)
            (
-               LCD_buffer[ x + (y / 8 * LCD_X) ] & // location on buffer (y / 8)
+               LCD_buffer[ x + (y / 8 * LCD_WIDTH) ] & // location on buffer (y / 8)
                (1 << (y % 8)) // get the appropriate bit from the byte (y % 8)
            );
 }
@@ -286,15 +286,15 @@ void LCD_HorizontalLine(int y, int x1, int x2, LCD_COLOR color) {
         case WHITE:
             byte = ~byte;
             for (x = x1; x <= x2; ++x)
-                LCD_buffer[ x + (y / 8 * LCD_X) ] &= byte;
+                LCD_buffer[ x + (y / 8 * LCD_WIDTH) ] &= byte;
             break;
         case BLACK:
             for (x = x1; x <= x2; ++x)
-                LCD_buffer[ x + (y / 8 * LCD_X) ] |= byte;
+                LCD_buffer[ x + (y / 8 * LCD_WIDTH) ] |= byte;
             break;
         case XOR:
             for (x = x1; x <= x2; ++x)
-                LCD_buffer[ x + (y / 8 * LCD_X) ] ^= byte;
+                LCD_buffer[ x + (y / 8 * LCD_WIDTH) ] ^= byte;
             break;
         default:
             break;
@@ -318,33 +318,33 @@ void LCD_VerticalLine(int x, int y1, int y2, LCD_COLOR color) {
         switch (color) {
         case WHITE:
             if (y1 / 8 != y2 / 8) {
-                LCD_buffer[ x + (y1 / 8 * LCD_X) ] &= ~(0xFF << (y1 % 8));
-                LCD_buffer[ x + (y2 / 8 * LCD_X) ] &= (0xFF << (y2 % 8));
+                LCD_buffer[ x + (y1 / 8 * LCD_WIDTH) ] &= ~(0xFF << (y1 % 8));
+                LCD_buffer[ x + (y2 / 8 * LCD_WIDTH) ] &= (0xFF << (y2 % 8));
                 for (y = (y1 / 8) + 1; y < (y2 / 8); y++) {
-                    LCD_buffer[ x + (y * LCD_X) ] = 0;
+                    LCD_buffer[ x + (y * LCD_WIDTH) ] = 0;
                 }
             }
-            else LCD_buffer[ x + (y1 / 8 * LCD_X) ] &= ~((0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8)));
+            else LCD_buffer[ x + (y1 / 8 * LCD_WIDTH) ] &= ~((0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8)));
             break;
         case BLACK:
             if (y1 / 8 != y2 / 8) {
-                LCD_buffer[ x + (y1 / 8 * LCD_X) ] |= 0xFF << (y1 % 8);
-                LCD_buffer[ x + (y2 / 8 * LCD_X) ] |= ~(0xFF << (y2 % 8));
+                LCD_buffer[ x + (y1 / 8 * LCD_WIDTH) ] |= 0xFF << (y1 % 8);
+                LCD_buffer[ x + (y2 / 8 * LCD_WIDTH) ] |= ~(0xFF << (y2 % 8));
                 for (y = (y1 / 8) + 1; y < (y2 / 8); y++) {
-                    LCD_buffer[ x + (y * LCD_X) ] = 0xFF;
+                    LCD_buffer[ x + (y * LCD_WIDTH) ] = 0xFF;
                 }
             }
-            else LCD_buffer[ x + (y1 / 8 * LCD_X) ] |= (0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8));
+            else LCD_buffer[ x + (y1 / 8 * LCD_WIDTH) ] |= (0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8));
             break;
         case XOR:
             if (y1 / 8 != y2 / 8) {
-                LCD_buffer[ x + (y1 / 8 * LCD_X) ] ^= 0xFF << (y1 % 8);
-                LCD_buffer[ x + (y2 / 8 * LCD_X) ] ^= ~(0xFF << (y2 % 8));
+                LCD_buffer[ x + (y1 / 8 * LCD_WIDTH) ] ^= 0xFF << (y1 % 8);
+                LCD_buffer[ x + (y2 / 8 * LCD_WIDTH) ] ^= ~(0xFF << (y2 % 8));
                 for (y = (y1 / 8) + 1; y < (y2 / 8); y++) {
-                    LCD_buffer[ x + (y * LCD_X) ] ^= 0xFF;
+                    LCD_buffer[ x + (y * LCD_WIDTH) ] ^= 0xFF;
                 }
             }
-            else LCD_buffer[ x + (y1 / 8 * LCD_X) ] ^= (0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8));
+            else LCD_buffer[ x + (y1 / 8 * LCD_WIDTH) ] ^= (0xFF << (y1 % 8)) & ~(0xFF << (y2 % 8));
             break;
         default:
             break;
@@ -379,23 +379,23 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                 switch (mode & MODE) {
                 case OR:
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] |= buffa;
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] |= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] |= buffb;
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] |= buffb;
                     break;
                 case AND:
                     buffa |= 0xFF >> (8 - y1 % 8);
                     buffb |= 0xFF << (y1 % 8);
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] &= buffa;
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] &= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] &= buffb;
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] &= buffb;
                     break;
                 case XOR:
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] ^= buffa;
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] ^= buffa;
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] ^= buffb;
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] ^= buffb;
                     break;
                 default:
                     break;
@@ -408,9 +408,9 @@ void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COL
                         byte = byte >> (8 - (h % 8));
                     }
                     if (TEST_Y(y1 + y * 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_X] ^= byte << (y1 % 8);
+                        LCD_buffer[x1 + x + (y + y1 / 8) * LCD_WIDTH] ^= byte << (y1 % 8);
                     if (TEST_Y(y1 + y * 8 + 8))
-                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_X] ^= byte >> (8 - y1 % 8);
+                        LCD_buffer[x1 + x + (y + y1 / 8 + 1) * LCD_WIDTH] ^= byte >> (8 - y1 % 8);
                 }
             }
             ++index;
@@ -510,3 +510,13 @@ void LCD_FillCircle(int x, int y, int radius, LCD_COLOR color) {
     }
 }
 
+void LCD_Scroll(int x, int y) {
+    unsigned char buffer[LCD_WIDTH * LCD_HEIGHT / 8];
+    int i;
+    for (i = 0; i < LCD_WIDTH * LCD_HEIGHT / 8; ++i)
+    {
+        buffer[i] = LCD_buffer[i];
+    }
+    LCD_Clear();
+    LCD_Blit(buffer, x, y, LCD_WIDTH, LCD_HEIGHT, OR);
+}
