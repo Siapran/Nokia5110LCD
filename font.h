@@ -1,4 +1,24 @@
+#include <stdlib.h>
 #include "lcd.h"
+
+void LCD_Wrap();
+void LCD_PutChar(char c);
+
+void LCD_Text(const char *string);
+void LCD_TextN(const char *string, size_t n);
+void LCD_Print(const char *string);
+void LCD_PrintN(const char *string, size_t n);
+
+void LCD_TextMode(LCD_COLOR mode);
+void LCD_TextLocate(int x, int y);
+
+
+#define LCD_CHAR_WIDTH 3
+#define LCD_CHAR_HEIGHT 5
+
+static int LCD_text_X = 0;
+static int LCD_text_Y = 0;
+static LCD_COLOR LCD_text_mode = OR;
 
 // pico8 style font
 static const unsigned char LCD_font[][3] = {
@@ -99,12 +119,3 @@ static const unsigned char LCD_font[][3] = {
 	{0x0C, 0x04, 0x06}, // 7e ~
 	{0x00, 0x00, 0x00}, // 7f DEL
 };
-
-#define LCD_CHAR_WIDTH 3
-#define LCD_CHAR_HEIGHT 5
-
-static int LCD_text_X = 0;
-static int LCD_text_Y = 0;
-static LCD_COLOR LCD_text_mode = OR;
-
-void LCD_Text(const char *string, int x, int y, LCD_COLOR mode);

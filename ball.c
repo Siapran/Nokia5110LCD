@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <time.h>
+#include <string.h>
 #include "lcd.h"
 #include "font.h"
 
@@ -100,7 +101,11 @@ void draw_ball(Ball *ball) {
 int main()
 {
     int size = sizeof(balls) / sizeof(*balls);
-    int i;
+    int i, j;
+
+    const char string[] = "Hello World! How are you? ";
+    int len = strlen(string);
+
     srand(time(NULL));
 
     for (i = 0; i < size; ++i)
@@ -115,22 +120,32 @@ int main()
 
     LCD_SetBacklight(1);
 
+    j = 0;
+
     for (;;) {
 
-        // for (i = 0; i < size; ++i)
-        // {
-        //     update_ball(&balls[i]);
-        // }
+        for (i = 0; i < size; ++i)
+        {
+            update_ball(&balls[i]);
+        }
 
-        // LCD_Clear();
+        LCD_Clear();
         // LCD_Invert();
 
-        LCD_Text("Hello World!", -1, -1, OR);
-        
-        // for (i = 0; i < size; ++i)
-        // {
-        //     draw_ball(&balls[i]);
-        // }
+        for (i = 0; i < size; ++i)
+        {
+            draw_ball(&balls[i]);
+        }
+
+        LCD_FillRect(0, (LCD_HEIGHT - LCD_CHAR_HEIGHT) / 2 - 2, LCD_WIDTH, (LCD_HEIGHT - LCD_CHAR_HEIGHT) / 2 + LCD_CHAR_HEIGHT + 1, BLACK);
+        LCD_FillRect(0, (LCD_HEIGHT - LCD_CHAR_HEIGHT) / 2 - 1, LCD_WIDTH, (LCD_HEIGHT - LCD_CHAR_HEIGHT) / 2 + LCD_CHAR_HEIGHT, WHITE);
+
+        LCD_TextLocate(j, (LCD_HEIGHT - LCD_CHAR_HEIGHT) / 2);
+        LCD_Text(string);
+        LCD_TextLocate(j + len * 4, (LCD_HEIGHT - LCD_CHAR_HEIGHT) / 2);
+        LCD_Text(string);
+
+        j = (j - 1) % (len * 4);
 
         // for (i = 0; i <= 84/16; ++i)
         // {
@@ -139,7 +154,7 @@ int main()
 
         LCD_Display();
 
-        usleep(250000);
+        usleep(25000);
     }
 
     return 0;
