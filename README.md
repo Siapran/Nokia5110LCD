@@ -8,7 +8,7 @@ You can either run it on a raspberry pi with wiringPi, or emulate the display us
 ## Author
 
 Siapran Candoris
-([retroactive.me](Retroactive) 2015)
+([Retroactive](retroactive.me) 2015)
 
 Inspired by the work of:
    Nathan Seidle (Spark Fun Electronics 2011), published under the "Beerware licence"
