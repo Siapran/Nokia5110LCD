@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS=-W -Wall -lSDL2
-LDFLAGS=-lSDL2
+CFLAGS=-W -Wall -lSDL2 -I../src/
+LDFLAGS=-lSDL2 -I../src/
 EXEC=ball
 SRC= $(wildcard *.c)
 OBJ= $(SRC:.c=.o)
@@ -24,5 +24,3 @@ rmproper: clean
 	@rm -rf $(EXEC)
 
 
-ball.o: lcd.h font.h
-font.o: lcd.h
