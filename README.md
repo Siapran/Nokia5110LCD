@@ -7,9 +7,9 @@ You can either run it on a raspberry pi with wiringPi, or emulate the display us
 
 ## Usage
 
-This code is meant to run on a raspberri pi wired up to a Nokia 5110 LCD. Please make sure you know what you're doing when you wire the LCD to your pi.
+This code is meant to run on a raspberry pi wired up to a Nokia 5110 LCD. Please make sure you know what you're doing when you wire the LCD to your pi.
 
-If you want to test a project directly on your computer, define LCD\_EMULATED in lcd.h, and link against the SDL2 libraries. This will set up an emulated LCD Screen in a SDL window. The only functions changed are LCD\_Init() and LCD_Display(). All graphic functions write in a buffer, and the buffer is sent to the LCD (or rendered with SDL) via LCD\_Display()
+If you want to test a project directly on your computer, define LCD\_EMULATED in lcd.h, and link against the SDL2 libraries. This will set up an emulated LCD Screen in a SDL window. The only functions changed are LCD\_Init() and LCD_Display(). All graphic functions write in a buffer, and the buffer is sent to the LCD (or rendered with SDL) via LCD\_Display().
 
 LCD\_Blit() takes a buffer using the same format as the screen buffer. You can generate these buffers using [this utility](https://github.com/Siapran/Nokia5110LCD-Image-Encoder).
 
@@ -20,7 +20,7 @@ LCD\_Blit() takes a buffer using the same format as the screen buffer. You can g
 
 ## Authors
 
-* Siapran Candoris ([Retroactive](retroactive.me) 2015)
+* Siapran Candoris ([Retroactive](http://retroactive.me/) 2015)
 * VynDragon
 
 Inspired by the work of:
