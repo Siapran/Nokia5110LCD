@@ -1,18 +1,3 @@
-/*
- 13-10-2015
- Retroactive (retroactive.me)
- Siapran Candoris
-
- This code is public domain, inspired by the work of:
-    Nathan Seidle (Spark Fun Electronics 2011), as "Beerware licenced" public domain 
-    Pierre "PierrotLL" Le Gall, as "free software"
-
- This code allows writing data to the Nokia 5110 84x48 graphic LCD:
- http://www.sparkfun.com/products/10168
-
- You can also test your code on an emulated Nokia 5110 screen by defining LCD_EMULATED and linking to SDL2 libraries.
- */
-
 #ifndef LCD_H
 #define LCD_H
 
