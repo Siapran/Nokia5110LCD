@@ -11,8 +11,9 @@ Siapran Candoris
 ([Retroactive](retroactive.me) 2015)
 
 Inspired by the work of:
-   Nathan Seidle (Spark Fun Electronics 2011), published under the "Beerware licence"
-   Pierre "PierrotLL" Le Gall, published as "free software"
+
+* Nathan Seidle (Spark Fun Electronics 2011), published under the "Beerware licence"
+* Pierre "PierrotLL" Le Gall, published as "free software"
 
 ## Licence
 
