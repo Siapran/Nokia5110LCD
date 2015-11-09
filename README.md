@@ -5,12 +5,15 @@ You can either run it on a raspberry pi with wiringPi, or emulate the display us
 
 ![demo](https://dl.dropboxusercontent.com/u/40487730/Pictures/gif/lcd.gif)
 
+## Author
+
+Siapran Candoris
+([retroactive.me](Retroactive) 2015)
+
+Inspired by the work of:
+   Nathan Seidle (Spark Fun Electronics 2011), published under the "Beerware licence"
+   Pierre "PierrotLL" Le Gall, published as "free software"
+
 ## Licence
 
-13-10-2015
-Retroactive (retroactive.me)
-Siapran Candoris
-
-This code is public domain, inspired by the work of:
-   Nathan Seidle (Spark Fun Electronics 2011), as "Beerware licenced" public domain 
-   Pierre "PierrotLL" Le Gall, as "free software"
+This code is public domain.
