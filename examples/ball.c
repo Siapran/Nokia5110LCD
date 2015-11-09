@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <string.h>
-#include "lcd.h"
-#include "font.h"
+#include "lcd/lcd.h"
+#include "lcd/font.h"
 
 typedef struct Buffer {
     int w;
