@@ -5,10 +5,15 @@ You can either run it on a raspberry pi with wiringPi, or emulate the display us
 
 ![demo](https://dl.dropboxusercontent.com/u/40487730/Pictures/gif/lcd.gif)
 
-## Author
+## Modules
 
-Siapran Candoris
-([Retroactive](retroactive.me) 2015)
+* **lcd.h**: Core display functionalities and graphic primitives
+* **font.h**: Text rendering utilities
+
+## Authors
+
+* Siapran Candoris ([Retroactive](retroactive.me) 2015)
+* VynDragon
 
 Inspired by the work of:
 
