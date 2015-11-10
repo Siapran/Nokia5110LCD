@@ -14,9 +14,11 @@ LCD\_Blit() takes a buffer using the same format as the screen buffer. You can g
 ## Demos
 
 * [Ball](examples/ball.c): Bouncing balls and text banner.
+  
   ![ball demo](https://dl.dropboxusercontent.com/u/40487730/Pictures/gif/lcd.gif)
 
 * [Clock](examples/clock.c): A pretty clock with date banners.
+
   ![clock demo](https://dl.dropboxusercontent.com/u/40487730/Pictures/gif/lcd_clock.gif)
 
 ## Modules
