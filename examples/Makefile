@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS= -W -Wall -lSDL2
 LDFLAGS= -lSDL2
-EXEC= ball clock
+EXEC= ball clock maze
 SRC= $(wildcard *.c) $(wildcard **/*.c)
 OBJ= $(SRC:.c=.o)
 LCD_SRC= $(wildcard lcd/*.c)
@@ -15,6 +15,9 @@ ball: ball.o $(LCD_OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 clock: clock.o $(LCD_OBJ)
+	$(CC) -o $@ $^ $(LDFLAGS)
+
+maze: maze.o $(LCD_OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
