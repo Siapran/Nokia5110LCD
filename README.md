@@ -21,6 +21,10 @@ LCD\_Blit() takes a buffer using the same format as the screen buffer. You can g
 
   ![clock demo](https://dl.dropboxusercontent.com/u/40487730/Pictures/gif/lcd_clock.gif)
 
+* [Maze](examples/maze.c): The old one-liner.
+
+  ![maze demo](https://dl.dropboxusercontent.com/u/40487730/Pictures/gif/lcd_maze.gif)
+
 ## Modules
 
 * **lcd.h**: Core display functionalities and graphic primitives
