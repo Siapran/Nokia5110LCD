@@ -12,6 +12,8 @@
 #define LCD_PIXEL_SIZE_X 6
 #define LCD_PIXEL_SIZE_Y 7
  
+typedef unsigned char LCD_Buffer[LCD_WIDTH * LCD_HEIGHT / 8];
+
 // LCD_COLOR is used both for pixel color and blitting modes
 typedef enum {
     UNDEFINED = -1,
@@ -45,5 +47,7 @@ void LCD_DrawCircle(int x, int y, int radius, LCD_COLOR color);
 void LCD_FillCircle(int x, int y, int radius, LCD_COLOR color);
 void LCD_Blit(const unsigned char *buffer, int x1, int y1, int w, int h, LCD_COLOR mode);
 void LCD_Scroll(int x, int y);
+void LCD_SaveScreen(LCD_Buffer buffer);
+void LCD_RestoreScreen(LCD_Buffer buffer);
 
 #endif

@@ -15,7 +15,7 @@ typedef enum {
 // screen buffer
 // all drawing operations are made internally on the buffer
 // the buffer is then sent to the LCD screen via LCD_Display()
-static unsigned char LCD_buffer[LCD_WIDTH * LCD_HEIGHT / 8];
+static LCD_Buffer LCD_buffer;
 LCD_COLOR LCD_PixelGet(int x, int y);
 
 #ifndef LCD_EMULATED
@@ -519,4 +519,18 @@ void LCD_Scroll(int x, int y) {
     }
     LCD_Clear();
     LCD_Blit(buffer, x, y, LCD_WIDTH, LCD_HEIGHT, OR);
+}
+
+void LCD_SaveScreen(LCD_Buffer buffer) {
+    size_t i;
+    for (i = 0 ; i < sizeof(LCD_buffer) ; ++i) {
+        buffer[i] = LCD_buffer[i];
+    }
+}
+
+void LCD_RestoreScreen(LCD_Buffer buffer) {
+    size_t i;
+    for (i = 0 ; i < sizeof(LCD_buffer) ; ++i) {
+        LCD_buffer[i] = buffer[i];
+    }
 }
