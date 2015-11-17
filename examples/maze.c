@@ -7,6 +7,8 @@
 #include "lcd/font.h"
 
 #define FRAMES_PER_SECOND 30
+#define BILLION 1000000000L
+
 static const unsigned char lines[][4] = {
 	{9, 12, 6, 3}, {9, 3, 6, 12}
 };
@@ -15,20 +17,20 @@ static unsigned char line[21];
 
 struct Timer
 {
-	clock_t start, stop;
+	struct timespec start, stop;
 };
 
+long get_msecs(struct timespec *start, struct timespec *end) {
+	return (BILLION * (end->tv_sec - start->tv_sec) + end->tv_nsec - start->tv_nsec) / 1000000;
+}
+
 void timer_start(struct Timer *self) {
-	self->start = clock();
+	clock_gettime(CLOCK_MONOTONIC, &self->start);
 }
 
-long int timer_get_ticks(struct Timer *self) {
-	return (clock() - self->start) * 1000 / CLOCKS_PER_SEC;
-}
-
-long int timer_stop(struct Timer *self) {
-	self->stop = clock();
-	return (self->stop - self->start) * 1000 / CLOCKS_PER_SEC;
+long timer_get_msecs(struct Timer *self) {
+	clock_gettime(CLOCK_MONOTONIC, &self->stop);
+	return get_msecs(&self->start, &self->stop);
 }
 
 void update_line() {
@@ -50,6 +52,7 @@ int main()
 	struct Timer fps;
 	int offset = 0;
 
+
 	srand(time(NULL));
 
 	if (LCD_Init() != 0) {
@@ -58,6 +61,7 @@ int main()
 	}
 
 	LCD_SetBacklight(1);
+
 
 	for (;;) {
 
@@ -74,9 +78,9 @@ int main()
 
 		LCD_Display();
 
-		if (timer_get_ticks(&fps) < 1000 / FRAMES_PER_SECOND)
+		if (timer_get_msecs(&fps) < 1000 / FRAMES_PER_SECOND)
 		{
-			usleep(1000 * ( 1000 / FRAMES_PER_SECOND ) - timer_get_ticks(&fps));
+			usleep(1000 * ( 1000 / FRAMES_PER_SECOND ) - timer_get_msecs(&fps));
 		}
 
 	}

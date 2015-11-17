@@ -1,6 +1,6 @@
 CC=gcc
-CFLAGS= -W -Wall -lSDL2
-LDFLAGS= -lSDL2
+CFLAGS= -W -Wall -lSDL2 -Os
+LDFLAGS= -lSDL2 -Os
 EXEC= ball clock maze
 SRC= $(wildcard *.c) $(wildcard **/*.c)
 OBJ= $(SRC:.c=.o)
