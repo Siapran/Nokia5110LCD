@@ -34,14 +34,16 @@ long timer_get_msecs(struct Timer *self) {
 }
 
 void update_line() {
-	for (int i = 0; i < sizeof(line); ++i)
+	size_t i;
+	for (i = 0; i < sizeof(line); ++i)
 	{
 		line[i] = rand() % 2;
 	}
 }
 
 void draw_line(int y) {
-	for (int i = 0; i < sizeof(line); ++i)
+	size_t i;
+	for (i = 0; i < sizeof(line); ++i)
 	{
 		LCD_Blit(lines[line[i]], i * 4, y, 4, 4, OR);
 	}
