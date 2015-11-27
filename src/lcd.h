@@ -1,7 +1,7 @@
 #ifndef LCD_H
 #define LCD_H
 
-#define LCD_EMULATED // to emulate LCD display using SDL
+// #define LCD_EMULATED // to emulate LCD display using SDL
 
 // You may find a different size screen, but this one is 84 by 48 pixels
 #define LCD_WIDTH     84

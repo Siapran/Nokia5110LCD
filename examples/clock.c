@@ -6,6 +6,27 @@
 #include "lcd/lcd.h"
 #include "lcd/font.h"
 
+#define FRAMES_PER_SECOND 30
+#define BILLION 1000000000L
+
+struct Timer
+{
+	struct timespec start, stop;
+};
+
+long get_msecs(struct timespec *start, struct timespec *end) {
+	return (BILLION * (end->tv_sec - start->tv_sec) + end->tv_nsec - start->tv_nsec) / 1000000;
+}
+
+void timer_start(struct Timer *self) {
+	clock_gettime(CLOCK_MONOTONIC, &self->start);
+}
+
+long timer_get_msecs(struct Timer *self) {
+	clock_gettime(CLOCK_MONOTONIC, &self->stop);
+	return get_msecs(&self->start, &self->stop);
+}
+
 static const char *days[] = {
 	"Sunday",
 	"Monday",
@@ -121,6 +142,8 @@ void draw_banner(struct Banner *banner, int y) {
 
 int main()
 {
+	struct Timer fps;
+	
 	time_t current;
 	struct tm *current_tm;
 	struct Banner date_banner = {
@@ -137,6 +160,8 @@ int main()
 
 	for (;;) {
 
+		timer_start(&fps);
+
 		current = time(NULL);
 		current_tm = localtime(&current);
 		string_print_date(date_string, current_tm);
@@ -149,9 +174,12 @@ int main()
 		draw_banner(&date_banner, 38);
 		LCD_Display();
 
-		usleep(25000);
+		if (timer_get_msecs(&fps) < 1000 / FRAMES_PER_SECOND) {
+			usleep(1000 * ( 1000 / FRAMES_PER_SECOND ) - timer_get_msecs(&fps));
+		}
 
 	}
 
 	return 0;
 }
+

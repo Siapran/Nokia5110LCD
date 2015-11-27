@@ -4,7 +4,6 @@
 #include <time.h>
 #include <string.h>
 #include "lcd/lcd.h"
-#include "lcd/font.h"
 
 #define FRAMES_PER_SECOND 30
 #define BILLION 1000000000L
