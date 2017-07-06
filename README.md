@@ -15,11 +15,11 @@ LCD\_Blit() takes a buffer using the same format as the screen buffer. You can g
 
 * [Ball](examples/ball.c): Bouncing balls and text banner.
   
-  ![ball demo](https://68.media.tumblr.com/ecd7190112ce187e0aa212286382e3fd/tumblr_o3zieiJEi11vonj1ko2_250.gif)
+  ![ball demo](https://68.media.tumblr.com/0d082375bba3e7da9c6b0cdd78dcee9f/tumblr_o3zieiJEi11vonj1ko1_250.gif)
 
 * [Clock](examples/clock.c): A pretty clock with date banners.
 
-  ![clock demo](https://68.media.tumblr.com/0d082375bba3e7da9c6b0cdd78dcee9f/tumblr_o3zieiJEi11vonj1ko1_250.gif)
+  ![clock demo](https://68.media.tumblr.com/ecd7190112ce187e0aa212286382e3fd/tumblr_o3zieiJEi11vonj1ko2_250.gif)
 
 * [Maze](examples/maze.c): The old one-liner.
 
